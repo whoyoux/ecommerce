@@ -52,3 +52,29 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+model Category {
+    id    String @id @default(cuid())
+    name  String
+    slug  String @unique
+    image String
+
+    products Product[]
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}
+
+model Product {
+    id          String   @id @default(cuid())
+    label       String
+    description String
+    price       Float
+    images      String[]
+
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId String
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}

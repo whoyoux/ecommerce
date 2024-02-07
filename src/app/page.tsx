@@ -9,10 +9,10 @@ export default async function Home() {
 		take: 10,
 	});
 	return (
-		<main className="flex flex-col gap-8 pt-10 mx-auto max-w-screen-lg">
+		<div className="flex flex-col gap-8 pt-10 mx-auto max-w-screen-lg">
 			<Hero />
 			<DealsOfTheDay products={products} />
 			<Featured products={products} />
-		</main>
+		</div>
 	);
 }

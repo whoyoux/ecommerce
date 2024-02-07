@@ -41,6 +41,7 @@ async function main() {
 		description: product.description,
 		price: product.price,
 		images: product.images,
+		rating: +(Math.random() * 5).toFixed(2),
 
 		categoryId:
 			categories.find((category) => category.name === product.category.name)

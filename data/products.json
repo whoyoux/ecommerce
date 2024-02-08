@@ -440,7 +440,7 @@
 	{
 		"id": 23,
 		"label": "Sleek Modern Laptop with Ambient Lighting",
-		"price": 43,
+		"price": 1200,
 		"description": "Experience next-level computing with our ultra-slim laptop, featuring a stunning display illuminated by ambient lighting. This high-performance machine is perfect for both work and play, delivering powerful processing in a sleek, portable design. The vibrant colors add a touch of personality to your tech collection, making it as stylish as it is functional.",
 		"images": [
 			"https://i.imgur.com/OKn1KFI.jpeg",
@@ -460,7 +460,7 @@
 	{
 		"id": 24,
 		"label": "Sleek Modern Laptop for Professionals",
-		"price": 97,
+		"price": 499,
 		"description": "Experience cutting-edge technology and elegant design with our latest laptop model. Perfect for professionals on-the-go, this high-performance laptop boasts a powerful processor, ample storage, and a long-lasting battery life, all encased in a lightweight, slim frame for ultimate portability. Shop now to elevate your work and play.",
 		"images": [
 			"https://i.imgur.com/ItHcq7o.jpeg",
@@ -899,7 +899,7 @@
 	{
 		"id": 46,
 		"label": "Sleek All-Terrain Go-Kart",
-		"price": 37,
+		"price": 990,
 		"description": "Experience the thrill of outdoor adventures with our Sleek All-Terrain Go-Kart, featuring a durable frame, comfortable racing seat, and robust, large-tread tires perfect for handling a variety of terrains. Designed for fun-seekers of all ages, this go-kart is an ideal choice for backyard racing or exploring local trails.",
 		"images": [
 			"https://i.imgur.com/Ex5x3IU.jpg",

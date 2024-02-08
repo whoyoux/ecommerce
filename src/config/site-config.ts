@@ -27,3 +27,31 @@ export const siteConfig = {
 	],
 	creator: "whoyoux",
 };
+
+export const CATEGORIES = [
+	{
+		name: "Clothes",
+		slug: "/clothes",
+		image: "https://i.imgur.com/QkIa5tT.jpeg",
+	},
+	{
+		name: "Electronics",
+		slug: "/electronics",
+		image: "https://i.imgur.com/ZANVnHE.jpeg",
+	},
+	{
+		name: "Furniture",
+		slug: "/furniture",
+		image: "https://i.imgur.com/Qphac99.jpeg",
+	},
+	{
+		name: "Shoes",
+		slug: "/shoes",
+		image: "https://i.imgur.com/qNOjJje.jpeg",
+	},
+	{
+		name: "Miscellaneous",
+		slug: "/miscellaneous",
+		image: "https://i.imgur.com/BG8J0Fj.jpg",
+	},
+];

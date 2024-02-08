@@ -6,72 +6,41 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 type RedirectWithURLStatesProps = {
-	search: string;
+	query: string;
 	category: string;
 	rating: string;
+	minPrice: string;
+	maxPrice: string;
 };
 
-//NEED TO TEST THIS FUNCTION!
-export const RedirectWithURLStates = ({
-	search,
+export const GetURLWithStates = ({
+	query,
 	category,
 	rating,
+	minPrice,
+	maxPrice,
 }: RedirectWithURLStatesProps): string => {
-	if (search === "") {
-		if (category === "" && rating === "") return "/search";
-		// biome-ignore lint/style/noUselessElse: <explanation>
-		else if (category !== "" && rating === "") {
-			const encodedSearch = new URLSearchParams({
-				category,
-			});
-			return `/search?${encodedSearch}`;
-			// biome-ignore lint/style/noUselessElse: <explanation>
-		} else if (category === "" && rating !== "") {
-			const encodedSearch = new URLSearchParams({
-				rating,
-			});
-			return `/search?${encodedSearch}`;
-			// biome-ignore lint/style/noUselessElse: <explanation>
-		} else if (category !== "" && rating !== "") {
-			const encodedSearch = new URLSearchParams({
-				category,
-				rating,
-			});
-			return `/search?${encodedSearch}`;
-		}
-	} else {
-		if (category === "" && rating === "") {
-			const encodedSearch = new URLSearchParams({
-				query: search,
-			});
+	const params = new URLSearchParams();
 
-			return `/search?${encodedSearch}`;
-			// biome-ignore lint/style/noUselessElse: <explanation>
-		} else if (category !== "" && rating === "") {
-			const encodedSearch = new URLSearchParams({
-				query: search,
-				category,
-			});
-
-			return `/search?${encodedSearch}`;
-			// biome-ignore lint/style/noUselessElse: <explanation>
-		} else if (category === "" && rating !== "") {
-			const encodedSearch = new URLSearchParams({
-				query: search,
-				rating,
-			});
-
-			return `/search?${encodedSearch}`;
-			// biome-ignore lint/style/noUselessElse: <explanation>
-		} else {
-			const encodedSearch = new URLSearchParams({
-				query: search,
-				category,
-				rating,
-			});
-
-			return `/search?${encodedSearch}`;
-		}
+	if (query.trim() !== "") {
+		params.append("query", query.trim());
 	}
-	return "/search";
+
+	if (category.trim() !== "") {
+		params.append("category", category.trim());
+	}
+
+	if (rating.trim() !== "") {
+		params.append("rating", rating.trim());
+	}
+
+	if (minPrice.trim() !== "") {
+		params.append("min_price", minPrice.trim());
+	}
+
+	if (maxPrice.trim() !== "") {
+		params.append("max_price", maxPrice.trim());
+	}
+
+	return `/search?${params.toString()}`;
 };

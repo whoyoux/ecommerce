@@ -16,6 +16,9 @@ const ProductsList = ({ products, className }: ProductCardProps) => {
 				className,
 			)}
 		>
+			{products.length === 0 && (
+				<h2 className="text-2xl font-bold">No products found.</h2>
+			)}
 			{products.map((product) => (
 				<ProductCard key={product.id} {...product} className="" withRating />
 			))}

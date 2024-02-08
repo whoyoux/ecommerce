@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
 
 const FEATURED_TITLE = "Sundress Season";
@@ -6,6 +6,8 @@ const FEATURED_DESCRIPTION =
 	"Get ready for the warm weather with our latest collection of sundresses.";
 
 import featuredImage from "@/assets/images/item.jpg";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const Hero = () => {
 	return (
@@ -28,9 +30,15 @@ const Hero = () => {
 						{FEATURED_DESCRIPTION}
 					</p>
 					<div>
-						<Button className="font-semibold text-lg" size="lg">
+						<Link
+							href="/search"
+							className={cn(
+								buttonVariants({ size: "lg", variant: "default" }),
+								"font-semibold text-lg",
+							)}
+						>
 							Shop now
-						</Button>
+						</Link>
 					</div>
 				</div>
 			</div>

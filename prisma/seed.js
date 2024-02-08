@@ -1,39 +1,15 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-const CATEGORIES = [
-	{
-		name: "Clothes",
-		slug: "/clothes",
-		image: "https://i.imgur.com/QkIa5tT.jpeg",
-	},
-	{
-		name: "Electronics",
-		slug: "/electronics",
-		image: "https://i.imgur.com/ZANVnHE.jpeg",
-	},
-	{
-		name: "Furniture",
-		slug: "/furniture",
-		image: "https://i.imgur.com/Qphac99.jpeg",
-	},
-	{
-		name: "Shoes",
-		slug: "/shoes",
-		image: "https://i.imgur.com/qNOjJje.jpeg",
-	},
-	{
-		name: "Miscellaneous",
-		slug: "/miscellaneous",
-		image: "https://i.imgur.com/BG8J0Fj.jpg",
-	},
-];
+const categoriesJson = require("../data/categories.json");
 
 const productsJson = require("../data/products.json");
 
 async function main() {
 	const categories = await prisma.$transaction(
-		CATEGORIES.map((category) => prisma.category.create({ data: category })),
+		categoriesJson.map((category) =>
+			prisma.category.create({ data: category }),
+		),
 	);
 
 	const newData = productsJson.map((product) => ({

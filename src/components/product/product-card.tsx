@@ -17,6 +17,7 @@ const ProductCard = ({
 	images,
 	className,
 	rating,
+	price,
 	withRating = false,
 }: ProductCardProps) => {
 	return (
@@ -33,7 +34,7 @@ const ProductCard = ({
 				</div>
 			</Link>
 			<h4 className="mt-2 font-medium text-base">{label}</h4>
-			<h5 className="text-[#9C784A]">$25.99</h5>
+			<h5 className="text-[#9C784A]">${price}</h5>
 			{withRating && (
 				<h5 className="text-[#9C784A] flex items-center gap-1">
 					<Star size={16} />

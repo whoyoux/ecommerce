@@ -10,6 +10,9 @@ import SearchForm from "@/components/search-page/search-form";
 // min_price -> string -> number
 // max_price -> string -> number
 
+//TODO: Prerender page with no initial values
+// Render on demand when user selects some filters options
+
 import prisma from "@/lib/prisma";
 
 export type SeachParams = {

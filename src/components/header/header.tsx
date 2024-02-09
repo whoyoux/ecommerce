@@ -10,12 +10,13 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import SearchFormDialog from "../search-form-dialog";
 
 const NAV_ITEMS = [
-	{
-		label: "Sale",
-		href: "/sale",
-	},
+	// {
+	// 	label: "Sale",
+	// 	href: "/sale",
+	// },
 	{
 		label: "Clothes",
 		href: "/clothes",
@@ -71,13 +72,15 @@ const DesktopNav = () => {
 				</Link>
 			))}
 			<div className="flex items-center gap-2">
-				<Button
-					variant="secondary"
-					size="icon"
-					className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
-				>
-					<Search size={18} />
-				</Button>
+				<SearchFormDialog>
+					<Button
+						variant="secondary"
+						size="icon"
+						className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
+					>
+						<Search size={18} />
+					</Button>
+				</SearchFormDialog>
 
 				<Button
 					variant="secondary"

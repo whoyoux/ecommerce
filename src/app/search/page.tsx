@@ -2,7 +2,6 @@ import FilterBy from "@/components/search-page/filter-by";
 import ProductsList from "@/components/search-page/products-list";
 import Ratings from "@/components/search-page/ratings";
 import SearchForm from "@/components/search-page/search-form";
-
 //AVAIALBLE QUERY STATES!
 // query -> string
 // category -> electronics | clothes | furniture | shoes | miscellaneous | sale
@@ -13,7 +12,7 @@ import SearchForm from "@/components/search-page/search-form";
 //TODO: Prerender page with no initial values
 // Render on demand when user selects some filters options
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export type SeachParams = {
 	query: string | string[] | undefined;

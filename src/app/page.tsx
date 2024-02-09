@@ -2,7 +2,7 @@ import DealsOfTheDay from "@/components/home-page/deals-of-the-day";
 import Featured from "@/components/home-page/featured";
 import Hero from "@/components/home-page/hero";
 
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export default async function Home() {
 	const products = await prisma.product.findMany({

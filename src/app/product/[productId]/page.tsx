@@ -1,6 +1,6 @@
 import ProductImages from "@/components/product-page/product-images";
 import { Button } from "@/components/ui/button";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
 import {

@@ -43,7 +43,9 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    Cart          Cart?
+    cart          Cart?
+
+    stripeCustomerId String @unique
 }
 
 model VerificationToken {

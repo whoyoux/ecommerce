@@ -2,16 +2,24 @@
 import Image from "next/image";
 import { useState } from "react";
 
-const ProductImages = ({ images }: { images: string[] }) => {
+type ProductImagesProps = {
+	images: string[];
+	mainImageBase64: string;
+};
+
+const ProductImages = ({ images, mainImageBase64 }: ProductImagesProps) => {
 	const [selectedImage, setSelectedImage] = useState(0);
 	return (
-		<div className="flex flex-col max-w-[400px] gap-4">
+		<div className="flex flex-col max-w-md gap-4">
 			<div className="w-full relative aspect-square">
 				<Image
 					src={images[selectedImage]}
 					alt="Product photo"
 					fill
 					className="rounded-lg"
+					priority
+					placeholder="blur"
+					blurDataURL={mainImageBase64}
 				/>
 			</div>
 			<div className="flex items-center justify-between">

@@ -14,29 +14,25 @@ import SearchFormDialog from "../search-form-dialog";
 import { Suspense } from "react";
 
 const NAV_ITEMS = [
-	// {
-	// 	label: "Sale",
-	// 	href: "/sale",
-	// },
 	{
 		label: "Clothes",
-		href: "/clothes",
+		href: "/search?category=Clothes",
 	},
 	{
 		label: "Electronics",
-		href: "/electronics",
+		href: "/search?category=Electronics",
 	},
 	{
 		label: "Furniture",
-		href: "/furniture",
+		href: "/search?category=Furniture",
 	},
 	{
 		label: "Shoes",
-		href: "/shoes",
+		href: "/search?category=Shoes",
 	},
 	{
 		label: "Miscellaneous",
-		href: "/miscellaneous",
+		href: "/search?category=Miscellaneous",
 	},
 ];
 
@@ -48,10 +44,10 @@ const Header = () => {
 			<Link href="/">
 				<h1 className="text-xl font-bold">{WEBSITE_TITLE}</h1>
 			</Link>
-			<div className="hidden xl:flex">
+			<div className="hidden lg:flex">
 				<DesktopNav />
 			</div>
-			<div className="flex xl:hidden">
+			<div className="flex lg:hidden">
 				<MobileNav />
 			</div>
 		</header>
@@ -73,18 +69,7 @@ const DesktopNav = () => {
 				</Link>
 			))}
 			<div className="flex items-center gap-2">
-				<Suspense>
-					<SearchFormDialog>
-						<Button
-							variant="secondary"
-							size="icon"
-							className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
-						>
-							<Search size={18} />
-						</Button>
-					</SearchFormDialog>
-				</Suspense>
-
+				<SearchButtonDesktop />
 				<Button
 					variant="secondary"
 					size="icon"
@@ -135,13 +120,7 @@ const MobileNav = () => {
 						</Link>
 					))}
 					<div className="flex flex-col gap-2 mt-6">
-						<Button
-							variant="secondary"
-							size="icon"
-							className="bg-[#F5EDE8] hover:bg-[#f1e2da] w-full"
-						>
-							<Search size={18} />
-						</Button>
+						<SearchButtonMobile />
 
 						<Button
 							variant="secondary"
@@ -161,6 +140,58 @@ const MobileNav = () => {
 				</div>
 			</SheetContent>
 		</Sheet>
+	);
+};
+
+const SearchButtonDesktop = () => {
+	return (
+		<Suspense
+			fallback={
+				<Button
+					variant="secondary"
+					size="icon"
+					className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
+				>
+					<Search size={18} />
+				</Button>
+			}
+		>
+			<SearchFormDialog>
+				<Button
+					variant="secondary"
+					size="icon"
+					className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
+				>
+					<Search size={18} />
+				</Button>
+			</SearchFormDialog>
+		</Suspense>
+	);
+};
+
+const SearchButtonMobile = () => {
+	return (
+		<Suspense
+			fallback={
+				<Button
+					variant="secondary"
+					size="icon"
+					className="bg-[#F5EDE8] hover:bg-[#f1e2da] w-full"
+				>
+					<Search size={18} />
+				</Button>
+			}
+		>
+			<SearchFormDialog>
+				<Button
+					variant="secondary"
+					size="icon"
+					className="bg-[#F5EDE8] hover:bg-[#f1e2da] w-full"
+				>
+					<Search size={18} />
+				</Button>
+			</SearchFormDialog>
+		</Suspense>
 	);
 };
 

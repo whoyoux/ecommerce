@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import SearchFormDialog from "../search-form-dialog";
+import { Suspense } from "react";
 
 const NAV_ITEMS = [
 	// {
@@ -72,15 +73,17 @@ const DesktopNav = () => {
 				</Link>
 			))}
 			<div className="flex items-center gap-2">
-				{/* <SearchFormDialog>
-					<Button
-						variant="secondary"
-						size="icon"
-						className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
-					>
-						<Search size={18} />
-					</Button>
-				</SearchFormDialog> */}
+				<Suspense>
+					<SearchFormDialog>
+						<Button
+							variant="secondary"
+							size="icon"
+							className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
+						>
+							<Search size={18} />
+						</Button>
+					</SearchFormDialog>
+				</Suspense>
 
 				<Button
 					variant="secondary"

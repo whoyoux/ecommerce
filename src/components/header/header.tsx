@@ -72,7 +72,7 @@ const DesktopNav = () => {
 				</Link>
 			))}
 			<div className="flex items-center gap-2">
-				<SearchFormDialog>
+				{/* <SearchFormDialog>
 					<Button
 						variant="secondary"
 						size="icon"
@@ -80,7 +80,7 @@ const DesktopNav = () => {
 					>
 						<Search size={18} />
 					</Button>
-				</SearchFormDialog>
+				</SearchFormDialog> */}
 
 				<Button
 					variant="secondary"

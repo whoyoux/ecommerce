@@ -14,9 +14,6 @@ dependencies:
   '@hookform/resolvers':
     specifier: ^3.3.4
     version: 3.3.4(react-hook-form@7.50.1)
-  '@img/sharp-darwin-arm64':
-    specifier: ^0.33.2
-    version: 0.33.2
   '@prisma/client':
     specifier: ^5.9.1
     version: 5.9.1
@@ -276,6 +273,7 @@ packages:
     optionalDependencies:
       '@img/sharp-libvips-darwin-arm64': 1.0.1
     dev: false
+    optional: true
 
   /@img/sharp-darwin-x64@0.33.2:
     resolution: {integrity: sha512-/rK/69Rrp9x5kaWBjVN07KixZanRr+W1OiyKdXcbjQD6KbW+obaTeBBtLUAtbBsnlTTmWthw99xqoOS7SsySDg==}

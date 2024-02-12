@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 export default async function Home() {
 	const products = await prisma.product.findMany({
 		take: 10,
+		cacheStrategy: { ttl: 60 },
 	});
 	return (
 		<div className="flex flex-col gap-8 pt-10 mx-auto max-w-screen-lg">

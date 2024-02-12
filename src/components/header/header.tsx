@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import SearchFormDialog from "../search-form-dialog";
 import { Suspense } from "react";
+import { auth } from "@/lib/auth";
 
 const NAV_ITEMS = [
 	{
@@ -38,7 +39,9 @@ const NAV_ITEMS = [
 
 const WEBSITE_TITLE = "Fresh & Clean";
 
-const Header = () => {
+const Header = async () => {
+	const session = await auth();
+
 	return (
 		<header className="w-full border-b px-10 py-6 flex items-center justify-between">
 			<Link href="/">
@@ -70,13 +73,22 @@ const DesktopNav = () => {
 			))}
 			<div className="flex items-center gap-2">
 				<SearchButtonDesktop />
-				<Button
+				<Link
+					href="/account"
+					className={cn(
+						buttonVariants({ variant: "secondary", size: "icon" }),
+						"bg-[#F5EDE8] hover:bg-[#f1e2da]",
+					)}
+				>
+					<User size={20} />
+				</Link>
+				{/* <Button
 					variant="secondary"
 					size="icon"
 					className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
 				>
-					<User size={20} />
-				</Button>
+					
+				</Button> */}
 
 				<Button
 					size="icon"
@@ -122,13 +134,16 @@ const MobileNav = () => {
 					<div className="flex flex-col gap-2 mt-6">
 						<SearchButtonMobile />
 
-						<Button
-							variant="secondary"
-							size="icon"
-							className="bg-[#F5EDE8] hover:bg-[#f1e2da] w-full"
+						<Link
+							href="/account"
+							className={cn(
+								buttonVariants({ variant: "secondary" }),
+								"bg-[#F5EDE8] hover:bg-[#f1e2da] w-full",
+							)}
 						>
 							<User size={20} />
-						</Button>
+						</Link>
+
 						<Button
 							size="icon"
 							variant="secondary"

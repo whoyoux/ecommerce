@@ -40,12 +40,36 @@ model User {
     name          String?
     email         String?   @unique
     emailVerified DateTime?
+    password      String?
     image         String?
     accounts      Account[]
     sessions      Session[]
     cart          Cart?
 
-    stripeCustomerId String @unique
+    // stripeCustomerId String @unique 
+
+    personalInformation PersonalInformation?
+}
+
+model PersonalInformation {
+    id String @id @default(cuid())
+
+    firstName String @map("first_name")
+    lastName  String @map("last_name")
+
+    addressLine1 String @map("address_line_1")
+    addressLine2 String @map("address_line_2")
+
+    postalCode String @map("postal_code")
+
+    state   String
+    city    String
+    country String
+
+    phoneNumber String @map("phone_number")
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String @unique
 }
 
 model VerificationToken {
@@ -79,9 +103,10 @@ model Product {
     category   Category @relation(fields: [categoryId], references: [id])
     categoryId String
 
-    createdAt     DateTime        @default(now()) @map("created_at")
-    updatedAt     DateTime        @default(now()) @updatedAt @map("updated_at")
-    ProductInCart ProductInCart[]
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+    productInCart ProductInCart[]
 }
 
 model Cart {

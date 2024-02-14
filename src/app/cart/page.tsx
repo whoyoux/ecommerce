@@ -1,18 +1,21 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
+import DecrementQtyForm from "@/components/cart-page/decrement-qty-form";
+import IncrementQtyForm from "@/components/cart-page/increment-qty-form";
 import RemoveProductButton from "@/components/cart-page/remove-product-button";
+import { Button } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
 	TableCaption,
 	TableCell,
-	TableFooter,
 	TableHead,
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/prisma";
+import { Cart, Prisma } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,49 +45,124 @@ const CartPage = async () => {
 				{isCartEmpty ? (
 					<h2>Your cart is empty.</h2>
 				) : (
-					<Table>
-						<TableCaption>A list of your recent invoices.</TableCaption>
-						<TableHeader>
-							<TableRow>
-								<TableHead className="w-[100px]">Image</TableHead>
-								<TableHead>Name</TableHead>
-								<TableHead className="text-right">Quantity</TableHead>
-								<TableHead className="text-right">Price</TableHead>
-								<TableHead className="text-right">Actions</TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{cart.products.map((product) => (
-								<TableRow key={product.id}>
-									<TableCell>
-										<Image
-											src={product.product.images[0]}
-											alt="Product image"
-											width={100}
-											height={100}
-											className="rounded-lg"
-										/>
-									</TableCell>
-									<TableCell className="font-medium">
-										<Link href={`/product/${product.product.id}`}>
-											{product.product.label}
-										</Link>
-									</TableCell>
-									<TableCell className="text-right">
-										{product.quantity}
-									</TableCell>
-									<TableCell className="text-right font-medium">
-										${(product.product.price * product.quantity).toFixed(2)}
-									</TableCell>
-									<TableCell className="text-right">
-										<RemoveProductButton productId={product.id} />
-									</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
+					<>
+						<div className="hidden md:flex w-full">
+							<CartForDesktop {...cart} />
+						</div>
+						<div className="flex md:hidden mx-auto">
+							<CartForMobile {...cart} />
+						</div>
+					</>
 				)}
+				<div className="flex justify-end">
+					<Button>Proceed to Checkout</Button>
+				</div>
 			</section>
+		</div>
+	);
+};
+
+type ProductsFromCart = Prisma.CartGetPayload<{
+	include: {
+		products: {
+			include: {
+				product: true;
+			};
+		};
+	};
+}>;
+
+const CartForDesktop = ({ products }: ProductsFromCart) => {
+	return (
+		<Table>
+			<TableCaption>A list of your recent invoices.</TableCaption>
+			<TableHeader>
+				<TableRow>
+					<TableHead className="w-[100px]">Image</TableHead>
+					<TableHead>Name</TableHead>
+					<TableHead className="text-right">Quantity</TableHead>
+					<TableHead className="text-right">Price</TableHead>
+					<TableHead className="text-right">Actions</TableHead>
+				</TableRow>
+			</TableHeader>
+			<TableBody>
+				{products.map((product) => (
+					<TableRow key={`dc-${product.id}`}>
+						<TableCell>
+							<Image
+								src={product.product.images[0]}
+								alt="Product image"
+								width={100}
+								height={100}
+								className="rounded-lg"
+							/>
+						</TableCell>
+						<TableCell className="font-medium truncate max-w-[100px]">
+							<Link
+								href={`/product/${product.product.id}`}
+								className="truncate"
+							>
+								{product.product.label}
+							</Link>
+						</TableCell>
+						<TableCell className="text-right">
+							<div className="gap-2 flex items-center justify-end">
+								<DecrementQtyForm productId={product.id} />
+								<span className="font-medium">{product.quantity}</span>
+								<IncrementQtyForm productId={product.id} />
+							</div>
+						</TableCell>
+						<TableCell className="text-right font-medium">
+							${(product.product.price * product.quantity).toFixed(2)}
+						</TableCell>
+						<TableCell className="text-right">
+							<RemoveProductButton productId={product.id} />
+						</TableCell>
+					</TableRow>
+				))}
+			</TableBody>
+		</Table>
+	);
+};
+
+const CartForMobile = ({ products }: ProductsFromCart) => {
+	return (
+		<div className="w-full">
+			{products.map((product) => (
+				<div key={`cm-${product.id}`} className="flex gap-4 border-b pb-5">
+					<div>
+						<Image
+							src={product.product.images[0]}
+							alt="Product image"
+							width={100}
+							height={100}
+							className="rounded-lg"
+						/>
+					</div>
+					<div className="flex flex-col gap-4">
+						<Link
+							href={`/product/${product.product.id}`}
+							className="text-xl font-semibold"
+						>
+							{product.product.label}
+						</Link>
+
+						<div className="flex items-center gap-2 w-full justify-between">
+							<div className="flex items-center gap-2">
+								<DecrementQtyForm productId={product.id} />
+								<span>{product.quantity}</span>
+								<IncrementQtyForm productId={product.id} />
+							</div>
+							<RemoveProductButton productId={product.id} />
+						</div>
+						<div className="flex justify-end">
+							<span className="font-semibold">
+								${(product.product.price * product.quantity).toFixed(2)}
+							</span>
+						</div>
+					</div>
+				</div>
+			))}
 		</div>
 	);
 };

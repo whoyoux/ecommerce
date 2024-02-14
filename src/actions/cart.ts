@@ -182,3 +182,137 @@ export const removeFromCart = async (productId: string): Promise<Response> => {
 		};
 	}
 };
+
+export const incrementQtyInCart = async (
+	productId: string,
+): Promise<Response> => {
+	const session = await auth();
+	if (!session || !session.user?.id) {
+		return {
+			success: false,
+			code: "NOT_AUTHENTICATED",
+			message: "Not authenticated",
+		};
+	}
+
+	try {
+		await prisma.cart.update({
+			where: {
+				userId: session.user.id,
+			},
+			data: {
+				products: {
+					update: {
+						where: {
+							id: productId,
+						},
+						data: {
+							quantity: {
+								increment: 1,
+							},
+						},
+					},
+				},
+			},
+		});
+
+		revalidatePath("/cart");
+
+		return {
+			success: true,
+			code: "PRODUCT_QUANTITY_UPDATED",
+			message: "Product quantity updated",
+		};
+	} catch (err) {
+		console.error(`Error incrementing product quantity in cart: ${err}`);
+		return {
+			success: false,
+			code: "SERVER_ERROR",
+			message: "Server error. Please try again later.",
+		};
+	}
+};
+
+export const decrementQtyInCart = async (productId: string) => {
+	const session = await auth();
+	if (!session || !session.user?.id) {
+		return {
+			success: false,
+			code: "NOT_AUTHENTICATED",
+			message: "Not authenticated",
+		};
+	}
+
+	try {
+		await prisma.$transaction(async (tx) => {
+			const cart = await tx.cart.findFirst({
+				where: {
+					userId: session.user.id,
+				},
+				include: {
+					products: true,
+				},
+			});
+
+			if (!cart || !cart.products) {
+				throw new Error("Cart not found or empty");
+			}
+
+			const product = cart.products.find((p) => p.id === productId);
+
+			if (!product) {
+				throw new Error("Product not found in cart");
+			}
+
+			if (product.quantity > 1) {
+				await tx.cart.update({
+					where: {
+						userId: session.user.id,
+					},
+					data: {
+						products: {
+							update: {
+								where: {
+									id: productId,
+								},
+								data: {
+									quantity: {
+										decrement: 1,
+									},
+								},
+							},
+						},
+					},
+				});
+			} else {
+				await tx.cart.update({
+					where: {
+						userId: session.user.id,
+					},
+					data: {
+						products: {
+							delete: {
+								id: productId,
+							},
+						},
+					},
+				});
+			}
+		});
+
+		revalidatePath("/cart");
+
+		return {
+			success: true,
+			code: "PRODUCT_QUANTITY_UPDATED",
+			message: "Product quantity updated",
+		};
+	} catch (err) {
+		console.error(`Error decrementing product quantity in cart: ${err}`);
+		return {
+			success: false,
+			code: "SERVER_ERROR",
+			message: "Server error. Please try again later.",
+		};
+	}
+};

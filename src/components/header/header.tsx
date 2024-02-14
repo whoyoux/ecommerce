@@ -9,10 +9,10 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
-import SearchFormDialog from "../search-form-dialog";
-import { Suspense } from "react";
 import { auth } from "@/lib/auth";
+import { cn } from "@/lib/utils";
+import { Suspense } from "react";
+import SearchFormDialog from "../search-form-dialog";
 
 const NAV_ITEMS = [
 	{
@@ -82,21 +82,16 @@ const DesktopNav = () => {
 				>
 					<User size={20} />
 				</Link>
-				{/* <Button
-					variant="secondary"
-					size="icon"
-					className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
-				>
-					
-				</Button> */}
 
-				<Button
-					size="icon"
-					variant="secondary"
-					className="bg-[#F5EDE8] hover:bg-[#f1e2da]"
+				<Link
+					href="/cart"
+					className={cn(
+						buttonVariants({ variant: "secondary", size: "icon" }),
+						"bg-[#F5EDE8] hover:bg-[#f1e2da]",
+					)}
 				>
 					<ShoppingCart size={20} />
-				</Button>
+				</Link>
 			</div>
 		</div>
 	);
@@ -144,13 +139,15 @@ const MobileNav = () => {
 							<User size={20} />
 						</Link>
 
-						<Button
-							size="icon"
-							variant="secondary"
-							className="bg-[#F5EDE8] hover:bg-[#f1e2da] w-full"
+						<Link
+							href="/cart"
+							className={cn(
+								buttonVariants({ variant: "secondary" }),
+								"bg-[#F5EDE8] hover:bg-[#f1e2da] w-full",
+							)}
 						>
 							<ShoppingCart size={20} />
-						</Button>
+						</Link>
 					</div>
 				</div>
 			</SheetContent>

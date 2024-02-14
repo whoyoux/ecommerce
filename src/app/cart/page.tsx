@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
+import RemoveProductButton from "@/components/cart-page/remove-product-button";
 import {
 	Table,
 	TableBody,
@@ -12,8 +13,8 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/prisma";
-import { ProductInCart } from "@prisma/client";
 import Image from "next/image";
+import Link from "next/link";
 
 const CartPage = async () => {
 	const session = await auth();
@@ -36,7 +37,7 @@ const CartPage = async () => {
 
 	return (
 		<div className="max-w-screen-xl mx-auto w-full pt-10">
-			<section>
+			<section className="flex flex-col gap-8">
 				<h1 className="text-3xl font-bold">My cart</h1>
 				{isCartEmpty ? (
 					<h2>Your cart is empty.</h2>
@@ -47,7 +48,8 @@ const CartPage = async () => {
 							<TableRow>
 								<TableHead className="w-[100px]">Image</TableHead>
 								<TableHead>Name</TableHead>
-								<TableHead>Quantity</TableHead>
+								<TableHead className="text-right">Quantity</TableHead>
+								<TableHead className="text-right">Price</TableHead>
 								<TableHead className="text-right">Actions</TableHead>
 							</TableRow>
 						</TableHeader>
@@ -64,11 +66,18 @@ const CartPage = async () => {
 										/>
 									</TableCell>
 									<TableCell className="font-medium">
-										{product.product.label}
+										<Link href={`/product/${product.id}`}>
+											{product.product.label}
+										</Link>
 									</TableCell>
-									<TableCell>{product.quantity}</TableCell>
+									<TableCell className="text-right">
+										{product.quantity}
+									</TableCell>
 									<TableCell className="text-right font-medium">
 										${(product.product.price * product.quantity).toFixed(2)}
+									</TableCell>
+									<TableCell className="text-right">
+										<RemoveProductButton productId={product.id} />
 									</TableCell>
 								</TableRow>
 							))}
@@ -79,34 +88,5 @@ const CartPage = async () => {
 		</div>
 	);
 };
-
-// type CartTableProps = {
-// 	products: ProductInCart[];
-// };
-// const CartTable = ({ products }: CartTableProps) => {
-// 	return (
-// 		<Table>
-// 			<TableCaption>A list of your recent invoices.</TableCaption>
-// 			<TableHeader>
-// 				<TableRow>
-// 					<TableHead className="w-[100px]">Image</TableHead>
-// 					<TableHead>Name</TableHead>
-// 					<TableHead>Quantity</TableHead>
-// 					<TableHead className="text-right">Actions</TableHead>
-// 				</TableRow>
-// 			</TableHeader>
-//             <TableBody>
-//                 {products.map((product) => (
-//                     <TableRow key={product.id}>
-//                     <TableCell>image</TableCell>
-//                     <TableCell className="font-medium">{product.}</TableCell>
-//                     <TableCell>Credit Card</TableCell>
-//                     <TableCell className="text-right">$250.00</TableCell>
-//                   </TableRow>
-//                 ))}
-//             </TableBody>
-// 		</Table>
-// 	);
-// };
 
 export default CartPage;

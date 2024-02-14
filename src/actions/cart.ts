@@ -143,9 +143,42 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 };
 
 export const removeFromCart = async (productId: string): Promise<Response> => {
-	return {
-		success: false,
-		code: "NOT_IMPLEMENTED",
-		message: "Not implemented yet.",
-	};
+	const session = await auth();
+	if (!session || !session.user?.id) {
+		return {
+			success: false,
+			code: "NOT_AUTHENTICATED",
+			message: "Not authenticated",
+		};
+	}
+
+	try {
+		await prisma.cart.update({
+			where: {
+				userId: session.user.id,
+			},
+			data: {
+				products: {
+					delete: {
+						id: productId,
+					},
+				},
+			},
+		});
+
+		revalidatePath("/cart");
+
+		return {
+			success: true,
+			code: "PRODUCT_REMOVED_FROM_CART",
+			message: "Product removed from cart",
+		};
+	} catch (err) {
+		console.error(`Error removing product from cart: ${err}`);
+		return {
+			success: false,
+			code: "SERVER_ERROR",
+			message: "Server error. Please try again later.",
+		};
+	}
 };

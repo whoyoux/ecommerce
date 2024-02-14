@@ -75,7 +75,7 @@ type ProductsFromCart = Prisma.CartGetPayload<{
 const CartForDesktop = ({ products }: ProductsFromCart) => {
 	return (
 		<Table>
-			<TableCaption>A list of your recent invoices.</TableCaption>
+			<TableCaption>A list of products in your cart.</TableCaption>
 			<TableHeader>
 				<TableRow>
 					<TableHead className="w-[100px]">Image</TableHead>

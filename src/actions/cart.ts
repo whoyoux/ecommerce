@@ -3,12 +3,12 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { addProductToCartSchema } from "@/validators/cartSchema";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 type Response =
 	| {
-			error: true;
-			errorCode:
+			success: false;
+			code:
 				| "SERVER_ERROR"
 				| "NOT_AUTHENTICATED"
 				| "INVALID_DATA"
@@ -17,6 +17,11 @@ type Response =
 	  }
 	| {
 			success: true;
+			code:
+				| "PRODUCT_ADDED_TO_CART"
+				| "PRODUCT_REMOVED_FROM_CART"
+				| "CART_CLEARED"
+				| "PRODUCT_QUANTITY_UPDATED";
 			message: string;
 	  };
 
@@ -28,8 +33,8 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 
 	if (!parsedFormData.success) {
 		return {
-			error: true,
-			errorCode: "INVALID_DATA",
+			success: false,
+			code: "INVALID_DATA",
 			message: "Invalid data",
 		};
 	}
@@ -40,8 +45,8 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 
 	if (!session || !session.user?.id) {
 		return {
-			error: true,
-			errorCode: "NOT_AUTHENTICATED",
+			success: false,
+			code: "NOT_AUTHENTICATED",
 			message: "Not authenticated",
 		};
 	}
@@ -54,8 +59,8 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 
 	if (!product) {
 		return {
-			error: true,
-			errorCode: "INVALID_DATA",
+			success: false,
+			code: "INVALID_DATA",
 			message: "Invalid product id",
 		};
 	}
@@ -91,42 +96,47 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 					},
 				},
 			});
-		} else {
-			await prisma.cart.upsert({
-				where: {
-					userId: session.user.id,
-				},
-				update: {
-					products: {
-						create: {
-							productId,
-							quantity,
-						},
-					},
-				},
-				create: {
-					userId: session.user.id,
-					products: {
-						create: {
-							productId,
-							quantity,
-						},
-					},
-				},
-			});
+
+			return {
+				success: true,
+				code: "PRODUCT_QUANTITY_UPDATED",
+				message: "Product added to cart",
+			};
 		}
 
-		//Need to revalidate the page where user is right now
-		revalidatePath(`/product/${productId}`);
+		await prisma.cart.upsert({
+			where: {
+				userId: session.user.id,
+			},
+			update: {
+				products: {
+					create: {
+						productId,
+						quantity,
+					},
+				},
+			},
+			create: {
+				userId: session.user.id,
+				products: {
+					create: {
+						productId,
+						quantity,
+					},
+				},
+			},
+		});
 
+		revalidatePath(`/product/${productId}`);
 		return {
 			success: true,
+			code: "PRODUCT_ADDED_TO_CART",
 			message: "Product added to cart",
 		};
 	} catch (err) {
 		return {
-			error: true,
-			errorCode: "SERVER_ERROR",
+			success: false,
+			code: "SERVER_ERROR",
 			message: "Server error. Please try again later.",
 		};
 	}
@@ -134,8 +144,8 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 
 export const removeFromCart = async (productId: string): Promise<Response> => {
 	return {
-		error: true,
-		errorCode: "NOT_IMPLEMENTED",
+		success: false,
+		code: "NOT_IMPLEMENTED",
 		message: "Not implemented yet.",
 	};
 };

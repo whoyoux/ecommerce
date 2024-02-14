@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { loginUser } from "@/actions/user";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -17,7 +18,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { loginFormSchema } from "@/validators/userSchemas";
 import { useState } from "react";
-import { loginUser } from "@/actions/user";
 
 const LoginForm = () => {
 	const [isLogging, setLogging] = useState(false);

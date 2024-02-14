@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
+import { addToCart } from "@/actions/cart";
 import {
 	Select,
 	SelectContent,
@@ -12,8 +13,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Star } from "lucide-react";
 import getBase64 from "@/lib/get-local-base64";
+import { Star } from "lucide-react";
 
 export async function generateStaticParams() {
 	const products = await prisma.product.findMany({});
@@ -34,9 +35,11 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
 
 	const mainPhotoBase64 = await getBase64(product.images[0]);
 
-	const addToCart = async (formData: FormData) => {
+	const addProductToCart = async (formData: FormData) => {
 		"use server";
-		console.log(formData.get("quantity"));
+
+		const result = await addToCart(formData);
+		console.log(result);
 	};
 
 	return (
@@ -50,8 +53,9 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
 				</section>
 				<form
 					className="flex-1 flex flex-col gap-4 max-w-md mx-auto"
-					action={addToCart}
+					action={addProductToCart}
 				>
+					<input type="hidden" name="productId" value={product.id} />
 					<h1 className="text-3xl font-bold">{product.label}</h1>
 					<div>
 						<h3 className="text-2xl font-semibold mt-2">Descriptipn</h3>

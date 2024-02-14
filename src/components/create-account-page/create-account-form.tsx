@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { createUser } from "@/actions/user";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -15,9 +16,9 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createUser } from "@/actions/user";
-import { useState } from "react";
 import { createUserSchema } from "@/validators/userSchemas";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const CreateAccountForm = () => {
 	const [isCreating, setCreating] = useState(false);
@@ -38,7 +39,11 @@ const CreateAccountForm = () => {
 		const result = await createUser(values);
 		setCreating(false);
 
-		console.log(result);
+		if (!result?.error) {
+			toast.success("Account created successfully! Please log in.");
+		} else {
+			toast.error(result.message || "Something went wrong.");
+		}
 	}
 	return (
 		<Form {...form}>

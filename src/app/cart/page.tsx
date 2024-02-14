@@ -66,7 +66,7 @@ const CartPage = async () => {
 										/>
 									</TableCell>
 									<TableCell className="font-medium">
-										<Link href={`/product/${product.id}`}>
+										<Link href={`/product/${product.product.id}`}>
 											{product.product.label}
 										</Link>
 									</TableCell>

@@ -32,6 +32,11 @@ const CartPage = async () => {
 				include: {
 					product: true,
 				},
+				orderBy: {
+					product: {
+						label: "asc",
+					},
+				},
 			},
 		},
 	});

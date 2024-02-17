@@ -1,11 +1,10 @@
-import NotFound from "@/app/not-found";
 import PersonalInformationsForm from "@/components/account-page/personal-informations-form";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 const PersonalInformationsSubPage = async () => {
 	const session = await auth();
-	if (!session) return NotFound();
+	if (!session) return null;
 	const personalInformations = await prisma.personalInformation.findUnique({
 		where: {
 			userId: session.user.id,

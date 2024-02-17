@@ -247,6 +247,7 @@ export const incrementQtyInCart = async (
 	// 	};
 	// }
 
+	//TODO: i need to think about how to show error message
 	try {
 		await prisma.$transaction(async (tx) => {
 			const cart = await tx.cart.findFirst({

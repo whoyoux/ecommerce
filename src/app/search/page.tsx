@@ -57,6 +57,9 @@ const SearchPage = async ({ searchParams }: { searchParams: SeachParams }) => {
 				},
 			],
 		},
+		cacheStrategy: {
+			ttl: 60 * 60, //1 hour
+		},
 	});
 	return (
 		<div className="max-w-screen-2xl mx-auto pt-10 gap-4 flex flex-col md:flex-row">

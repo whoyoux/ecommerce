@@ -26,7 +26,6 @@ type Response =
 	  };
 
 export const addToCart = async (formData: FormData): Promise<Response> => {
-	console.log("Adding to cart");
 	const parsedFormData = addProductToCartSchema.safeParse(
 		Object.fromEntries(formData.entries()),
 	);

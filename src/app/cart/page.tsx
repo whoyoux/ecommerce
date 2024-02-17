@@ -43,6 +43,16 @@ const CartPage = async () => {
 
 	const isCartEmpty = !cart || cart.products.length === 0;
 
+	const subPrice =
+		cart?.products?.reduce(
+			(acc, product) => product.product.price * product.quantity + acc,
+			0,
+		) || 0;
+
+	const taxValue = subPrice * 0.23;
+
+	const totalPrice = subPrice + taxValue;
+
 	return (
 		<div className="max-w-screen-xl mx-auto w-full pt-10">
 			<section className="flex flex-col gap-8">
@@ -59,9 +69,24 @@ const CartPage = async () => {
 						</div>
 					</>
 				)}
-				<div className="flex justify-end">
-					<Button>Proceed to Checkout</Button>
-				</div>
+				{!isCartEmpty && (
+					<>
+						<div className="flex flex-col items-end gap-2">
+							<h3 className="text-xl font-semibold">
+								Subtotal: ${subPrice?.toFixed(2)}
+							</h3>
+							<h3 className="text-xl font-semibold">
+								Tax: ${taxValue?.toFixed(2)}
+							</h3>
+							<h3 className="text-xl font-semibold">
+								Total: ${totalPrice?.toFixed(2)}
+							</h3>
+						</div>
+						<div className="flex justify-end">
+							<Button>Proceed to Checkout</Button>
+						</div>
+					</>
+				)}
 			</section>
 		</div>
 	);

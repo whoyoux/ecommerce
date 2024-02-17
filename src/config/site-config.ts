@@ -55,3 +55,5 @@ export const CATEGORIES = [
 		image: "https://i.imgur.com/BG8J0Fj.jpg",
 	},
 ];
+
+export const MAX_QUANTITY_PER_PRODUCTS = 10;

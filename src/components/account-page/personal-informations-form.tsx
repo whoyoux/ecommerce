@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { personalInformationsFormSchema } from "@/validators/userSchemas";
 import { z } from "zod";
 
+import { savePersonalInformations } from "@/actions/user";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -17,27 +18,48 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PersonalInformation } from "@prisma/client";
+import { useState } from "react";
+import { toast } from "sonner";
 
 //TODO: Preload data from the DB and set to defaultValues
 
-const PersonalInformationsForm = () => {
+type PersonalInformationsFormProps = {
+	personalInformations: PersonalInformation | null;
+};
+
+const PersonalInformationsForm = ({
+	personalInformations,
+}: PersonalInformationsFormProps) => {
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
 	const form = useForm<z.infer<typeof personalInformationsFormSchema>>({
 		resolver: zodResolver(personalInformationsFormSchema),
 		defaultValues: {
-			firstName: "",
-			lastName: "",
-			addressLine1: "",
-			addressLine2: "",
-			postalCode: "",
-			state: "",
-			city: "",
-			country: "",
-			phoneNumber: undefined,
+			firstName: personalInformations?.firstName ?? "",
+			lastName: personalInformations?.lastName ?? "",
+			addressLine1: personalInformations?.addressLine1 ?? "",
+			addressLine2: personalInformations?.addressLine2 ?? "",
+			postalCode: personalInformations?.postalCode ?? "",
+			state: personalInformations?.state ?? "",
+			city: personalInformations?.city ?? "",
+			country: personalInformations?.country ?? "",
+			phoneNumber: personalInformations?.phoneNumber ?? undefined,
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof personalInformationsFormSchema>) {
-		console.log(values);
+	async function onSubmit(
+		values: z.infer<typeof personalInformationsFormSchema>,
+	) {
+		setIsSubmitting(true);
+		const result = await savePersonalInformations(values);
+		setIsSubmitting(false);
+
+		if (result.success) {
+			toast.success("Personal informations saved successfully.");
+		} else {
+			toast.error("Failed to save personal informations.");
+		}
 	}
 
 	return (

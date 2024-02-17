@@ -74,7 +74,10 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 	});
 
 	try {
-		if (cart?.products?.find((p) => p.productId === productId)) {
+		const foundProductInCart = cart?.products?.find(
+			(p) => p.productId === productId,
+		);
+		if (foundProductInCart) {
 			// Update the quantity
 			await prisma.cart.update({
 				where: {
@@ -84,6 +87,7 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 					products: {
 						update: {
 							where: {
+								id: foundProductInCart.id,
 								productId,
 							},
 							data: {

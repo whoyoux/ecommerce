@@ -1,8 +1,11 @@
 "use server";
 
-import { signIn } from "@/lib/auth";
+import { auth, signIn } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { createUserSchema } from "@/validators/userSchemas";
+import {
+	createUserSchema,
+	personalInformationsFormSchema,
+} from "@/validators/userSchemas";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -82,6 +85,57 @@ export const createUser = async (
 		};
 	}
 	redirect("/");
+};
+
+type SavePersonalInformationsResult = {
+	success: boolean;
+};
+
+export const savePersonalInformations = async (
+	values: z.infer<typeof personalInformationsFormSchema>,
+): Promise<SavePersonalInformationsResult> => {
+	const parsedFormData = personalInformationsFormSchema.safeParse(values);
+
+	if (!parsedFormData.success) {
+		return {
+			success: false,
+		};
+	}
+
+	const session = await auth();
+	if (!session || !session.user?.id) {
+		return {
+			success: false,
+		};
+	}
+
+	try {
+		await prisma.personalInformation.upsert({
+			where: {
+				userId: session.user.id,
+			},
+			update: {
+				...parsedFormData.data,
+			},
+			create: {
+				...parsedFormData.data,
+				user: {
+					connect: {
+						id: session.user.id,
+					},
+				},
+			},
+		});
+
+		return {
+			success: true,
+		};
+	} catch (err) {
+		console.error(`Error while saving personal informations: ${err}`);
+		return {
+			success: false,
+		};
+	}
 };
 
 export const loginUser = async (email: string, password: string) => {

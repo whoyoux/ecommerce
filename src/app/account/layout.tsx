@@ -45,8 +45,8 @@ const AccountPageLayout = async ({
 const Nav = () => {
 	return (
 		<>
-			<MobileNav className="block md:hidden" />
-			<DesktopNav className="hidden md:block" />
+			<MobileNav className="flex md:hidden" />
+			<DesktopNav className="hidden md:flex" />
 		</>
 	);
 };

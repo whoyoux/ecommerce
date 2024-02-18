@@ -72,15 +72,11 @@ export const createUser = async (
 			},
 		});
 
+		//TODO: I think it should be done after email verification
 		await addStripeCustomer({
 			id: createdUser.id,
 			email: createdUser.email,
 		});
-
-		// return {
-		//   error: false,
-		//   message: "New account created",
-		// };
 	} catch (err) {
 		return {
 			error: true,

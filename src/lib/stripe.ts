@@ -34,7 +34,7 @@ export const addStripeCustomer = async ({
 			},
 		});
 
-		console.log("Stripe customer created successfully.");
+		//console.log("Stripe customer created successfully.");
 	} catch (err) {
 		throw new Error(`Server error: ${err}`);
 	}

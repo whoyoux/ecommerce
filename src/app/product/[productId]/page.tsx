@@ -4,9 +4,7 @@ import { notFound } from "next/navigation";
 
 import AddToCartForm from "@/components/product-page/add-to-cart-form";
 import RecommendedProducts from "@/components/product-page/recommended-products";
-import ProductCard from "@/components/product/product-card";
 import getBase64 from "@/lib/get-local-base64";
-import { Suspense } from "react";
 
 export async function generateStaticParams() {
 	const products = await prisma.product.findMany({});

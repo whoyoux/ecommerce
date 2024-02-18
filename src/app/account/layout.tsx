@@ -35,7 +35,7 @@ const AccountPageLayout = async ({
 	const session = await auth();
 	if (!session) return redirect("/login");
 	return (
-		<div className="max-w-screen-xl mx-auto w-full flex flex-col gap-8 pt-10">
+		<div className="max-w-screen-xl mx-auto w-full flex flex-col md:flex-row gap-8 pt-10">
 			<Nav />
 			<section className="flex-1 w-full">{children}</section>
 		</div>
@@ -55,9 +55,11 @@ const MobileNav = ({ className }: { className?: string }) => {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<div className="w-full flex items-center justify-between">
+				<div
+					className={cn("w-full flex items-center justify-between", className)}
+				>
 					<h2 className="text-2xl font-semibold">Account</h2>
-					<Button className={cn(className)}>Open menu</Button>
+					<Button>Open menu</Button>
 				</div>
 			</SheetTrigger>
 			<SheetContent>

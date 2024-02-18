@@ -10,10 +10,15 @@ export const createUserSchema = z
 		confirmPassword: z
 			.string()
 			.min(8, "Password must contain at least 8 characters."),
+		acceptTerms: z.boolean().default(false),
 	})
 	.refine((record) => record.password === record.confirmPassword, {
 		message: "Passwords dont match",
 		path: ["confirmPassword"],
+	})
+	.refine((record) => record.acceptTerms, {
+		message: "You must accept Terms and Conditions",
+		path: ["acceptTerms"],
 	});
 
 export const loginFormSchema = z.object({

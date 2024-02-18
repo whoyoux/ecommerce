@@ -41,12 +41,10 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
 				<AddToCartForm product={product} />
 			</div>
 			<section className="mt-14">
-				<Suspense>
-					<RecommendedProducts
-						category={product.category.name}
-						currentProductId={product.id}
-					/>
-				</Suspense>
+				<RecommendedProducts
+					category={product.category.name}
+					currentProductId={product.id}
+				/>
 			</section>
 		</div>
 	);

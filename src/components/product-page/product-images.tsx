@@ -10,7 +10,7 @@ type ProductImagesProps = {
 const ProductImages = ({ images, mainImageBase64 }: ProductImagesProps) => {
 	const [selectedImage, setSelectedImage] = useState(0);
 	return (
-		<div className="flex flex-col max-w-md gap-4 mx-auto">
+		<div className="flex flex-col max-w-md gap-4 mx-auto md:ml-0">
 			<div className="w-full relative aspect-square">
 				<Image
 					src={images[selectedImage]}

@@ -23,6 +23,9 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
 		include: {
 			category: true,
 		},
+		cacheStrategy: {
+			ttl: 60 * 60, // 1 hour,
+		},
 	});
 
 	if (!product) return notFound();

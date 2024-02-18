@@ -46,7 +46,7 @@ model User {
     sessions      Session[]
     cart          Cart?
 
-    // stripeCustomerId String @unique 
+    stripeCustomerId String? @unique @map("stripe_customer_id")
 
     personalInformation PersonalInformation?
 }

@@ -2,6 +2,7 @@
 
 import { auth, signIn } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { addStripeCustomer } from "@/lib/stripe";
 import {
 	createUserSchema,
 	personalInformationsFormSchema,
@@ -71,7 +72,10 @@ export const createUser = async (
 			},
 		});
 
-		console.log(createdUser);
+		await addStripeCustomer({
+			id: createdUser.id,
+			email: createdUser.email,
+		});
 
 		// return {
 		//   error: false,

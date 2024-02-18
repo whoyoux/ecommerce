@@ -1,11 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { loginFormSchema } from "@/validators/userSchemas";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import NextAuth from "next-auth";
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import Discord from "next-auth/providers/discord";
+import { addStripeCustomer, stripe } from "./stripe";
 
 declare module "next-auth" {
 	interface Session {
@@ -85,6 +87,12 @@ export const authConfig = {
 				token.email = user.email;
 			}
 			return token;
+		},
+	},
+	events: {
+		async createUser({ user }) {
+			//This code is executed when a new user is logging with 3rd party provider only
+			await addStripeCustomer({ id: user.id, email: user.email });
 		},
 	},
 	session: {

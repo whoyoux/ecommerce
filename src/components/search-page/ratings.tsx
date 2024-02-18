@@ -20,6 +20,10 @@ const RATING_LEVELS = [
 		level: 1,
 		label: "1 stars & up",
 	},
+	{
+		level: "",
+		label: "All",
+	},
 ];
 
 const Ratings = ({ searchParams }: { searchParams: SeachParams }) => {

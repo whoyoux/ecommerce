@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import DecrementQtyForm from "@/components/cart-page/decrement-qty-form";
 import IncrementQtyForm from "@/components/cart-page/increment-qty-form";
 import RemoveProductButton from "@/components/cart-page/remove-product-button";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
@@ -15,6 +15,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/prisma";
+import { cn } from "@/lib/utils";
 import { Cart, Prisma } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -83,7 +84,13 @@ const CartPage = async () => {
 							</h3>
 						</div>
 						<div className="flex justify-end">
-							<Button>Proceed to Checkout</Button>
+							{/* <Button>Proceed to Checkout</Button> */}
+							<Link
+								href="/checkout"
+								className={cn(buttonVariants({ variant: "default" }))}
+							>
+								Proceed to Checkout
+							</Link>
 						</div>
 					</>
 				)}

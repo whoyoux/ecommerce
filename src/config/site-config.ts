@@ -59,3 +59,20 @@ export const CATEGORIES = [
 export const MAX_QUANTITY_PER_PRODUCTS = 10;
 
 export const TIME_FOR_TOKEN_EXPIRATION = 24 * 60 * 60 * 1000; //24 hours
+
+export const SHIPPING_OPTIONS = [
+	{
+		id: "standard",
+		label: "Standard",
+		description: "3-5 business days",
+		price: 20,
+		stripePriceId: "",
+	},
+	{
+		id: "fast",
+		label: "Fast",
+		description: "1-3 business days",
+		price: 30,
+		stripePriceId: "",
+	},
+];

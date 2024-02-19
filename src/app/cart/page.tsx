@@ -64,7 +64,7 @@ const CartPage = async () => {
 						<div className="hidden md:flex w-full">
 							<CartForDesktop {...cart} />
 						</div>
-						<div className="flex md:hidden mx-auto">
+						<div className="flex md:hidden">
 							<CartForMobile {...cart} />
 						</div>
 					</>
@@ -157,9 +157,12 @@ const CartForDesktop = ({ products }: ProductsFromCart) => {
 
 const CartForMobile = ({ products }: ProductsFromCart) => {
 	return (
-		<div className="w-full">
+		<div className="w-full flex flex-col gap-4">
 			{products.map((product) => (
-				<div key={`cm-${product.id}`} className="flex gap-4 border-b pb-5">
+				<div
+					key={`cm-${product.id}`}
+					className="w-full flex gap-4 border-b pb-5"
+				>
 					<div>
 						<Image
 							src={product.product.images[0]}
@@ -169,7 +172,7 @@ const CartForMobile = ({ products }: ProductsFromCart) => {
 							className="rounded-lg"
 						/>
 					</div>
-					<div className="flex flex-col gap-4">
+					<div className="flex flex-col gap-4 flex-1">
 						<Link
 							href={`/product/${product.product.id}`}
 							className="text-xl font-semibold"

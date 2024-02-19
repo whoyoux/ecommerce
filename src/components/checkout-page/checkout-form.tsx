@@ -76,6 +76,20 @@ const CheckoutForm = ({ totalCartValue, cart }: CheckoutFormProps) => {
 				<h3 className="font-semibold text-muted-foreground">
 					You will be able to add coupons on payment page.
 				</h3>
+				<div>
+					<h3 className="font-semibold text-muted-foreground">
+						Avaiable coupons:
+					</h3>
+					<ul>
+						<li className="text-muted-foreground">
+							FIRST25 - 25% off for first order
+						</li>
+						<li className="text-muted-foreground">
+							PROMO50 - 50 PLN off for orders over 200 PLN, can be used multiple
+							times
+						</li>
+					</ul>
+				</div>
 			</CheckoutSection>
 
 			<CheckoutSection title="Summary">

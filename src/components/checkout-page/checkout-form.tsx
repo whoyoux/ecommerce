@@ -89,7 +89,9 @@ const CheckoutForm = ({ totalCartValue, cart }: CheckoutFormProps) => {
 					))}
 					<div className="flex items-center justify-between">
 						<h3 className="font-semibold">Shipping</h3>
-						<h3 className="font-semibold">${selectedShipping?.price ?? "?"}</h3>
+						<h3 className="font-semibold">
+							{selectedShipping?.label} - ${selectedShipping?.price ?? "?"}
+						</h3>
 					</div>
 					<div className="flex items-center justify-between">
 						<h3 className="font-semibold text-xl">Total</h3>

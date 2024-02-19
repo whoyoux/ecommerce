@@ -50,10 +50,6 @@ const CartPage = async () => {
 			0,
 		) || 0;
 
-	const taxValue = subPrice * 0.23;
-
-	const totalPrice = subPrice + taxValue;
-
 	return (
 		<div className="max-w-screen-xl mx-auto w-full pt-10">
 			<section className="flex flex-col gap-8">
@@ -75,12 +71,6 @@ const CartPage = async () => {
 						<div className="flex flex-col items-end gap-2">
 							<h3 className="text-xl font-semibold">
 								Subtotal: ${subPrice?.toFixed(2)}
-							</h3>
-							<h3 className="text-xl font-semibold">
-								Tax: ${taxValue?.toFixed(2)}
-							</h3>
-							<h3 className="text-xl font-semibold">
-								Total: ${totalPrice?.toFixed(2)}
 							</h3>
 						</div>
 						<div className="flex justify-end">

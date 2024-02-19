@@ -66,13 +66,13 @@ export const SHIPPING_OPTIONS = [
 		label: "Standard",
 		description: "3-5 business days",
 		price: 20,
-		stripePriceId: "",
+		stripePriceId: "shr_1OlckrDta6b82wBGCCTQBSZO",
 	},
 	{
 		id: "fast",
 		label: "Fast",
 		description: "1-3 business days",
 		price: 30,
-		stripePriceId: "",
+		stripePriceId: "shr_1OlclPDta6b82wBGtr7XLBmb",
 	},
 ];

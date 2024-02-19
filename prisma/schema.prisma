@@ -49,6 +49,21 @@ model User {
     stripeCustomerId String? @unique @map("stripe_customer_id")
 
     personalInformation PersonalInformation?
+
+    activateTokens ActivateToken[]
+    active         Boolean         @default(false)
+}
+
+model ActivateToken {
+    id          String    @id @default(cuid())
+    token       String    @unique
+    activatedAt DateTime? @map("activated_at")
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
 }
 
 model PersonalInformation {

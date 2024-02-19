@@ -44,7 +44,9 @@ const CreateAccountForm = () => {
 		setCreating(false);
 
 		if (!result?.error) {
-			toast.success("Account created successfully! Please log in.");
+			toast.success(
+				"Account created successfully! Please activate your account on your email.",
+			);
 		} else {
 			toast.error(result.message || "Something went wrong.");
 		}

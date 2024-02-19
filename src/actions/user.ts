@@ -1,7 +1,9 @@
 "use server";
 
+import { randomUUID } from "crypto";
 import { auth, signIn } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { resend } from "@/lib/resend";
 import { addStripeCustomer } from "@/lib/stripe";
 import {
 	createUserSchema,
@@ -70,6 +72,20 @@ export const createUser = async (
 				email: email,
 				password: hashedPassword,
 			},
+		});
+
+		const token = await prisma.activateToken.create({
+			data: {
+				token: `${randomUUID()}${randomUUID()}`.replace(/-/g, ""),
+				userId: createdUser.id,
+			},
+		});
+
+		await resend.emails.send({
+			from: "support@whxtest.pl",
+			subject: "Activate your account - Fresh & Clean Ecommerce Store",
+			to: [email],
+			html: `Please click this link to <a href="http://localhost:3000/activate/${token.token}">activate your account</a>`,
 		});
 
 		//TODO: I think it should be done after email verification

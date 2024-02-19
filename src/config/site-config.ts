@@ -57,3 +57,5 @@ export const CATEGORIES = [
 ];
 
 export const MAX_QUANTITY_PER_PRODUCTS = 10;
+
+export const TIME_FOR_TOKEN_EXPIRATION = 24 * 60 * 60 * 1000; //24 hours

@@ -49,10 +49,13 @@ export const authConfig = {
 							password: true,
 							emailVerified: true,
 							image: true,
+							active: true,
 						},
 					});
 
 					if (!user || !user.password) throw new Error("User not found.");
+
+					if (!user.active) throw new Error("User is not active.");
 
 					const passwordMatch = await bcrypt.compare(
 						parsedCredentials.password,

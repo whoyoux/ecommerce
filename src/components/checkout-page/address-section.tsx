@@ -10,7 +10,7 @@ const AddressSection = ({
 }: { personalInformations: PersonalInformation | null }) => {
 	if (personalInformations) {
 		return (
-			<div className="flex items-center justify-between">
+			<div className="flex flex-col items-start justify-between gap-4 md:flex-row ">
 				<CheckoutCard
 					icon={<MapPin />}
 					firstLine={`${personalInformations.firstName} ${personalInformations.lastName}`}

@@ -72,6 +72,12 @@ const CheckoutForm = ({ totalCartValue, cart }: CheckoutFormProps) => {
 				</div>
 			</CheckoutSection>
 
+			<CheckoutSection title="Coupons">
+				<h3 className="font-semibold text-muted-foreground">
+					You will be able to add coupons on payment page.
+				</h3>
+			</CheckoutSection>
+
 			<CheckoutSection title="Summary">
 				<div className="flex flex-col gap-2">
 					{cart.products.map((cartProduct) => (
@@ -79,7 +85,7 @@ const CheckoutForm = ({ totalCartValue, cart }: CheckoutFormProps) => {
 							key={cartProduct.id}
 							className="flex items-center justify-between"
 						>
-							<h3 className="font-semibold">
+							<h3 className="font-medium truncate">
 								{cartProduct.product.label} x{cartProduct.quantity}
 							</h3>
 							<h3 className="font-semibold">
@@ -93,7 +99,7 @@ const CheckoutForm = ({ totalCartValue, cart }: CheckoutFormProps) => {
 							{selectedShipping?.label} - ${selectedShipping?.price ?? "?"}
 						</h3>
 					</div>
-					<div className="flex items-center justify-between">
+					<div className="flex items-center justify-between mt-2">
 						<h3 className="font-semibold text-xl">Total</h3>
 						<h3 className="font-semibold text-xl">
 							${totalCartValue + (selectedShipping?.price ?? 0)}

@@ -52,6 +52,8 @@ model User {
 
     activateTokens ActivateToken[]
     active         Boolean         @default(false)
+
+    orders Order[]
 }
 
 model ActivateToken {
@@ -146,6 +148,24 @@ model ProductInCart {
 
     cart   Cart?   @relation(fields: [cartId], references: [id], onDelete: Cascade)
     cartId String?
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+    order   Order?  @relation(fields: [orderId], references: [id])
+    orderId String?
+}
+
+model Order {
+    id String @id @default(cuid())
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+
+    products ProductInCart[]
+
+    paid   Boolean   @default(false)
+    paidAt DateTime? @map("paid_at")
 
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @default(now()) @updatedAt @map("updated_at")

@@ -1,13 +1,19 @@
 "use client";
 
+import { goToCheckout } from "@/actions/checkout";
 import CheckoutCard from "@/components/checkout-page/checkout-card";
 import CheckoutSection from "@/components/checkout-page/checkout-section";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SHIPPING_OPTIONS } from "@/config/site-config";
+import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import { Truck } from "lucide-react";
+import Link from "next/link";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
+import { Button, buttonVariants } from "../ui/button";
 
 type CheckoutFormProps = {
 	totalCartValue: number;
@@ -26,9 +32,21 @@ const CheckoutForm = ({ totalCartValue, cart }: CheckoutFormProps) => {
 	const [selectedShippingOption, setSelectedShippingOption] =
 		useState("standard");
 
+	const router = useRouter();
+
 	const selectedShipping = SHIPPING_OPTIONS.find(
 		(opt) => opt.id === selectedShippingOption,
 	);
+
+	const handleCheckout = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const result = await goToCheckout({ shippingId: selectedShippingOption });
+		if (result.success) {
+			router.push(result.url);
+		} else {
+			toast.error(result.message);
+		}
+	};
 
 	return (
 		<>
@@ -121,6 +139,20 @@ const CheckoutForm = ({ totalCartValue, cart }: CheckoutFormProps) => {
 					</div>
 				</div>
 			</CheckoutSection>
+			<form className="flex flex-col gap-1" onSubmit={handleCheckout}>
+				<div className="text-right text-sm text-muted-foreground">
+					<p>By proceeding to payment, I undertake to pay.</p>
+				</div>
+				<div className="flex items-center justify-end gap-4">
+					<Button>Continue to payment</Button>
+					<Link
+						href="/cart"
+						className={cn(buttonVariants({ variant: "secondary" }))}
+					>
+						Cancel
+					</Link>
+				</div>
+			</form>
 		</>
 	);
 };

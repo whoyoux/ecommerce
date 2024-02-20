@@ -47,21 +47,6 @@ const CheckoutPage = async () => {
 			</CheckoutSection>
 
 			<CheckoutForm totalCartValue={totalCartValue} cart={user.cart} />
-
-			<section className="flex flex-col gap-1">
-				<div className="text-right text-sm text-muted-foreground">
-					<p>By proceeding to payment, I undertake to pay.</p>
-				</div>
-				<div className="flex items-center justify-end gap-4">
-					<Button>Continue to payment</Button>
-					<Link
-						href="/cart"
-						className={cn(buttonVariants({ variant: "secondary" }))}
-					>
-						Cancel
-					</Link>
-				</div>
-			</section>
 		</div>
 	);
 };

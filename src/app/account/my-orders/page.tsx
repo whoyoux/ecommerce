@@ -49,9 +49,9 @@ const OrderCard = ({ order, idx }: { order: Order; idx: number }) => {
 				</Link>
 
 				<span className="text-muted-foreground">
-					{`${new Date(order.createdAt).toLocaleDateString()} ${new Date(
+					{`${new Date(order.createdAt).toLocaleDateString("pl-PL")} ${new Date(
 						order.createdAt,
-					).toLocaleTimeString()}`}
+					).toLocaleTimeString("pl-PL")}`}
 				</span>
 			</div>
 			<h4 className="text-sm text-muted-foreground">

@@ -77,8 +77,8 @@ export const goToCheckout = async ({
 		});
 
 		const stripeSession = await stripe.checkout.sessions.create({
-			success_url: "http://localhost:3000/account/my-orders",
-			cancel_url: "http://localhost:3000/cart",
+			success_url: `${process.env.BASE_URL}/account/my-orders`,
+			cancel_url: `${process.env.BASE_URL}/cart`,
 			line_items: userWithCart.cart.products.map((product) => ({
 				price_data: {
 					unit_amount: product.product.price * 100,

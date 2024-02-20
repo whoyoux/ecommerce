@@ -24,6 +24,37 @@ export async function POST(request: NextRequest) {
 	}
 
 	switch (event.type) {
+		case "checkout.session.expired": {
+			const session = event.data.object as Stripe.Checkout.Session;
+			if (!session)
+				return new Response("There is something wrong with session object. ", {
+					status: 400,
+				});
+
+			const orderId = session.metadata?.orderId;
+			if (!orderId)
+				return new Response("There is something wrong with orderId. ", {
+					status: 400,
+				});
+
+			try {
+				await prisma.order.update({
+					where: {
+						id: orderId,
+					},
+					data: {
+						canceled: true,
+						canceledAt: new Date(),
+					},
+				});
+			} catch (err) {
+				return new Response(`Database error: ${err}`, {
+					status: 500,
+				});
+			}
+
+			break;
+		}
 		case "checkout.session.completed": {
 			const session = event.data.object as Stripe.Checkout.Session;
 			if (!session)

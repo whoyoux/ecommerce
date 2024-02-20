@@ -26,7 +26,11 @@ const MyOrdersSubPage = async () => {
 			) : (
 				<div className="flex flex-col gap-4 mt-6">
 					{orders.map((order, idx) => (
-						<OrderCard key={order.id} order={order} idx={idx} />
+						<OrderCard
+							key={order.id}
+							order={order}
+							idx={orders.length - (idx + 1)}
+						/>
 					))}
 				</div>
 			)}

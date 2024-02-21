@@ -31,7 +31,7 @@ const AddToCartForm = ({ product }: AddToCartFormProps) => {
 		formData.append("quantity", quantity);
 		const result = await addToCart(formData);
 
-		if (result.success) {
+		if (result?.success) {
 			toast.success(result.message);
 		} else {
 			toast.error(result.message);
@@ -53,7 +53,7 @@ const AddToCartForm = ({ product }: AddToCartFormProps) => {
 				<span className="text-primary">
 					<Star />
 				</span>
-				{`${product.rating} out of 5`}
+				{`${product.rating.toFixed(2)} out of 5`}
 			</div>
 
 			<div className="flex items-center justify-between">

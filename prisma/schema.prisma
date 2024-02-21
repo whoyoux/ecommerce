@@ -87,6 +87,9 @@ model PersonalInformation {
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String @unique
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 }
 
 model VerificationToken {
@@ -159,10 +162,16 @@ model ProductInCart {
 model Order {
     id String @id @default(cuid())
 
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user   User   @relation(fields: [userId], references: [id])
     userId String
 
-    products ProductInCart[]
+    products   ProductInCart[]
+    totalPrice Float           @map("total_price")
+
+    shippingAddress ShippingAddress?
+    shippingStatus  SHIPPING_STATUS  @default(PENDING) @map("shipping_status")
+    shippingMethod  SHIPPING_METHOD  @map("shipping_method")
+    shippingPrice   Float            @map("shipping_price")
 
     paid   Boolean   @default(false)
     paidAt DateTime? @map("paid_at")
@@ -172,4 +181,32 @@ model Order {
 
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+}
+
+model ShippingAddress {
+    id String @id @default(cuid())
+
+    order   Order  @relation(fields: [orderId], references: [id])
+    orderId String @unique
+
+    firstName    String  @map("first_name")
+    lastName     String  @map("last_name")
+    addressLine1 String  @map("address_line_1")
+    addressLine2 String? @map("address_line_2")
+    postalCode   String  @map("postal_code")
+    state        String
+    city         String
+    country      String
+    phoneNumber  String  @map("phone_number")
+}
+
+enum SHIPPING_STATUS {
+    PENDING
+    SHIPPED
+    DELIVERED
+}
+
+enum SHIPPING_METHOD {
+    STANDARD
+    FAST
 }

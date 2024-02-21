@@ -13,9 +13,9 @@ type Response =
 	  }
 	| {
 			success: false;
+			code: "EMPTY_CART" | "NO_PERSONAL_INFORMATION" | "UNKNOWN_ERROR";
 			message: string;
-	  }
-	| never;
+	  };
 
 export const goToCheckout = async ({
 	shippingId,
@@ -49,28 +49,58 @@ export const goToCheckout = async ({
 		!userWithCart.cart?.products ||
 		userWithCart.cart.products.length === 0
 	) {
-		return redirect("/cart");
+		return {
+			success: false,
+			code: "EMPTY_CART",
+			message: "Your cart is empty. Please add some products first.",
+		};
 	}
 
 	if (!userWithCart.personalInformation) {
-		return redirect("/account/personal-informations");
+		return {
+			success: false,
+			code: "NO_PERSONAL_INFORMATION",
+			message: "Please fill personal information first.",
+		};
 	}
 
-	const shippingOption =
-		SHIPPING_OPTIONS.find((option) => option.id === shippingId)
-			?.stripePriceId ?? SHIPPING_OPTIONS[0].stripePriceId;
+	const shippingOption = SHIPPING_OPTIONS.find(
+		(option) => option.id === shippingId,
+	);
+
+	const shippingMethod = shippingOption?.id === "fast" ? "FAST" : "STANDARD";
+
+	const totalPrice = userWithCart.cart.products.reduce((acc, product) => {
+		return acc + product.product.price * product.quantity;
+	}, 0);
 
 	try {
 		//Creating order in db
 		const newOrder = await prisma.order.create({
 			data: {
 				userId: session.user.id,
+				totalPrice,
+				shippingPrice: shippingOption?.price ?? SHIPPING_OPTIONS[0].price,
 				products: {
 					createMany: {
 						data: userWithCart.cart.products.map((product) => ({
 							productId: product.productId,
 							quantity: product.quantity,
 						})),
+					},
+				},
+				shippingMethod,
+				shippingAddress: {
+					create: {
+						firstName: userWithCart.personalInformation.firstName,
+						lastName: userWithCart.personalInformation.lastName,
+						addressLine1: userWithCart.personalInformation.addressLine1,
+						addressLine2: userWithCart.personalInformation.addressLine2,
+						postalCode: userWithCart.personalInformation.postalCode,
+						city: userWithCart.personalInformation.city,
+						state: userWithCart.personalInformation.state,
+						country: userWithCart.personalInformation.country,
+						phoneNumber: userWithCart.personalInformation.phoneNumber,
 					},
 				},
 			},
@@ -94,7 +124,8 @@ export const goToCheckout = async ({
 			mode: "payment",
 			shipping_options: [
 				{
-					shipping_rate: shippingOption,
+					shipping_rate:
+						shippingOption?.stripePriceId ?? SHIPPING_OPTIONS[0].stripePriceId,
 				},
 			],
 			payment_method_types: ["card", "blik", "p24"],
@@ -108,6 +139,7 @@ export const goToCheckout = async ({
 		if (!stripeSession.url) {
 			return {
 				success: false,
+				code: "UNKNOWN_ERROR",
 				message: "Something went wrong. Please try again later.",
 			};
 		}
@@ -132,6 +164,7 @@ export const goToCheckout = async ({
 		console.error(err);
 		return {
 			success: false,
+			code: "UNKNOWN_ERROR",
 			message: String(err) ?? "Something went wrong. Please try again later.",
 		};
 	}

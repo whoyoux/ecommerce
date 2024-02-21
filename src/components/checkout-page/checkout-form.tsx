@@ -45,6 +45,18 @@ const CheckoutForm = ({ totalCartValue, cart }: CheckoutFormProps) => {
 			router.push(result.url);
 		} else {
 			toast.error(result.message);
+			switch (result.code) {
+				case "EMPTY_CART":
+					router.push("/cart");
+					break;
+				case "NO_PERSONAL_INFORMATION":
+					router.push("/account/personal-informations");
+					break;
+				case "UNKNOWN_ERROR":
+					break;
+				default:
+					break;
+			}
 		}
 	};
 

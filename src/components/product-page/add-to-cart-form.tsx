@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Product } from "@prisma/client";
 import { Star } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 type AddToCartFormProps = {
@@ -23,6 +23,7 @@ type AddToCartFormProps = {
 
 const AddToCartForm = ({ product }: AddToCartFormProps) => {
 	const [quantity, setQuantity] = useState("1");
+	const [isPending, startTransition] = useTransition();
 
 	const addProductToCart = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -40,7 +41,7 @@ const AddToCartForm = ({ product }: AddToCartFormProps) => {
 	return (
 		<form
 			className="flex-1 flex flex-col gap-4 max-w-md mx-auto"
-			onSubmit={(e) => addProductToCart(e)}
+			onSubmit={(e) => startTransition(() => addProductToCart(e))}
 		>
 			<input type="hidden" name="productId" value={product.id} />
 			<h1 className="text-3xl font-bold">{product.label}</h1>
@@ -83,7 +84,12 @@ const AddToCartForm = ({ product }: AddToCartFormProps) => {
 				<h2 className="text-3xl text-primary font-semibold">
 					${product.price}
 				</h2>
-				<Button className="flex-1" type="submit">
+				<Button
+					className="flex-1"
+					type="submit"
+					disabled={isPending}
+					aria-disabled={isPending}
+				>
 					Add to cart
 				</Button>
 			</div>

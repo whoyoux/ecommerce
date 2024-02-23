@@ -5,14 +5,15 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 
+import LogOutButton from "@/components/logout-button";
 import {
 	Sheet,
 	SheetContent,
-	SheetDescription,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import { User } from "@prisma/client";
 
 const links = [
 	{
@@ -36,22 +37,25 @@ const AccountPageLayout = async ({
 	if (!session) return redirect("/login");
 	return (
 		<div className="max-w-screen-xl mx-auto w-full flex flex-col md:flex-row gap-8 pt-10">
-			<Nav />
+			<Nav userRole={session.user.role} />
 			<section className="flex-1 w-full">{children}</section>
 		</div>
 	);
 };
 
-const Nav = () => {
+const Nav = ({ userRole }: { userRole: User["role"] }) => {
 	return (
 		<>
-			<MobileNav className="flex md:hidden" />
-			<DesktopNav className="hidden md:flex" />
+			<MobileNav className="flex md:hidden" userRole={userRole} />
+			<DesktopNav className="hidden md:flex" userRole={userRole} />
 		</>
 	);
 };
 
-const MobileNav = ({ className }: { className?: string }) => {
+const MobileNav = ({
+	className,
+	userRole,
+}: { className?: string; userRole: User["role"] }) => {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
@@ -79,6 +83,19 @@ const MobileNav = ({ className }: { className?: string }) => {
 							{link.label}
 						</Link>
 					))}
+
+					{userRole === "ADMIN" && (
+						<Link
+							href="/admin"
+							className={cn(
+								buttonVariants({ variant: "secondary", size: "lg" }),
+								"text-red-500",
+							)}
+						>
+							Admin dashboard
+						</Link>
+					)}
+
 					<LogOutButton />
 				</div>
 			</SheetContent>
@@ -86,7 +103,10 @@ const MobileNav = ({ className }: { className?: string }) => {
 	);
 };
 
-const DesktopNav = ({ className }: { className?: string }) => {
+const DesktopNav = ({
+	className,
+	userRole,
+}: { className?: string; userRole: User["role"] }) => {
 	return (
 		<section className={cn("w-[200px] flex flex-col gap-4", className)}>
 			<Link href="/account">
@@ -102,24 +122,17 @@ const DesktopNav = ({ className }: { className?: string }) => {
 						{link.label}
 					</Link>
 				))}
+				{userRole === "ADMIN" && (
+					<Link
+						href="/admin"
+						className="hover:underline font-semibold underline-offset-4 text-red-500"
+					>
+						Admin dashboard
+					</Link>
+				)}
 				<LogOutButton />
 			</div>
 		</section>
-	);
-};
-
-const LogOutButton = () => {
-	return (
-		<form
-			action={async () => {
-				"use server";
-				await signOut({
-					redirectTo: "/",
-				});
-			}}
-		>
-			<Button className="w-full mt-2">Sign out</Button>
-		</form>
 	);
 };
 

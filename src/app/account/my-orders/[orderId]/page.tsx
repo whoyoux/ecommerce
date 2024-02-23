@@ -27,6 +27,21 @@ const SpecificOrderPage = async ({
 
 	if (!order) return notFound();
 
+	type ShippingStatus = typeof order.shippingStatus;
+
+	const renderStatus = (status: ShippingStatus) => {
+		switch (status) {
+			case "PENDING":
+				return <span className="text-lg">Processing</span>;
+			case "SHIPPED":
+				return <span className="text-lg">Shipped</span>;
+			case "DELIVERED":
+				return <span className="text-lg">Delivered</span>;
+			default:
+				return "Unknown";
+		}
+	};
+
 	return (
 		<div>
 			<h1 className="text-3xl font-extrabold">Order</h1>
@@ -35,6 +50,12 @@ const SpecificOrderPage = async ({
 					"pl-PL",
 				)} ${new Date(order.createdAt).toLocaleTimeString("pl-PL")}`}
 			</p>
+			<div>
+				<h2 className="text-xl font-semibold mt-4">
+					Current status:{" "}
+					<span className="text-lg">{renderStatus(order.shippingStatus)}</span>
+				</h2>
+			</div>
 			<section>
 				<ul className="flex flex-col gap-2 mt-4">
 					<h2 className="text-xl font-semibold">Products</h2>

@@ -42,6 +42,7 @@ model User {
     emailVerified DateTime?
     password      String?
     image         String?
+    role          USER_ROLE @default(USER)
     accounts      Account[]
     sessions      Session[]
     cart          Cart?
@@ -209,4 +210,9 @@ enum SHIPPING_STATUS {
 enum SHIPPING_METHOD {
     STANDARD
     FAST
+}
+
+enum USER_ROLE {
+    ADMIN
+    USER
 }

@@ -66,13 +66,11 @@ const getTopSellingProducts = async () => {
 };
 
 const AdminPage = async () => {
-	const [totalSales, totalRevenue, totalUsers, topSellingProducts] =
-		await Promise.all([
-			getTotalSales(),
-			getRevenue(),
-			getTotalRegisteredUsers(),
-			getTopSellingProducts(),
-		]);
+	const [totalSales, totalRevenue, totalUsers] = await Promise.all([
+		getTotalSales(),
+		getRevenue(),
+		getTotalRegisteredUsers(),
+	]);
 	console.log("total sales: ", totalSales);
 	console.log("total revenue: ", totalRevenue);
 	return (

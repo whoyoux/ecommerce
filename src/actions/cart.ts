@@ -74,6 +74,14 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 		};
 	}
 
+	if (product.inStock < quantity) {
+		return {
+			success: false,
+			code: "NO_STOCK_AVAILABLE",
+			message: "No stock available",
+		};
+	}
+
 	const cart = await prisma.cart.findFirst({
 		where: {
 			userId: session.user.id,
@@ -95,6 +103,14 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 					success: false,
 					code: "INVALID_DATA",
 					message: `You can't add more than ${MAX_QUANTITY_PER_PRODUCTS} of the same product to the cart.`,
+				};
+			}
+
+			if (foundProductInCart.quantity + quantity > product.inStock) {
+				return {
+					success: false,
+					code: "NO_STOCK_AVAILABLE",
+					message: `Not enough stock for ${product.label}.`,
 				};
 			}
 
@@ -282,7 +298,10 @@ export const incrementQtyInCart = async (
 				throw new Error("Product not found in cart");
 			}
 
-			if (product.product.inStock === 0) {
+			if (
+				product.product.inStock === 0 ||
+				product.product.inStock - product.quantity - 1 <= 0
+			) {
 				throw new Error("No stock available");
 			}
 
@@ -321,7 +340,7 @@ export const incrementQtyInCart = async (
 			message: "Product quantity updated",
 		};
 	} catch (err) {
-		console.error(`Error decrementing product quantity in cart: ${err}`);
+		console.error(`Error incrementing product quantity in cart: ${err}`);
 		return {
 			success: false,
 			code: "SERVER_ERROR",

@@ -58,11 +58,17 @@ const AddToCartForm = ({ product }: AddToCartFormProps) => {
 			</div>
 
 			<div className="flex items-center justify-between">
+				<h3 className="text-2xl font-semibold">Stock</h3>
+				<p className="font-medium">{product.inStock} left</p>
+			</div>
+
+			<div className="flex items-center justify-between">
 				<h3 className="text-2xl font-semibold">Quantity</h3>
 				<Select
 					defaultValue="1"
 					name="quantity"
 					onValueChange={(v) => setQuantity(v)}
+					disabled={isPending || product.inStock === 0}
 				>
 					<SelectTrigger className="w-[100px]">
 						<SelectValue placeholder="Select quantity" />
@@ -87,8 +93,8 @@ const AddToCartForm = ({ product }: AddToCartFormProps) => {
 				<Button
 					className="flex-1"
 					type="submit"
-					disabled={isPending}
-					aria-disabled={isPending}
+					disabled={isPending || product.inStock === 0}
+					aria-disabled={isPending || product.inStock === 0}
 				>
 					Add to cart
 				</Button>

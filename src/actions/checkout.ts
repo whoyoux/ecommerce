@@ -4,6 +4,7 @@ import { SHIPPING_OPTIONS } from "@/config/site-config";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 type Response =
@@ -13,7 +14,11 @@ type Response =
 	  }
 	| {
 			success: false;
-			code: "EMPTY_CART" | "NO_PERSONAL_INFORMATION" | "UNKNOWN_ERROR";
+			code:
+				| "EMPTY_CART"
+				| "NO_PERSONAL_INFORMATION"
+				| "UNKNOWN_ERROR"
+				| "NO_STOCK_AVAILABLE";
 			message: string;
 	  };
 
@@ -75,6 +80,16 @@ export const goToCheckout = async ({
 	}, 0);
 
 	try {
+		//Check if products are available
+		for (const product of userWithCart.cart.products) {
+			if (product.product.inStock < product.quantity) {
+				return {
+					success: false,
+					code: "NO_STOCK_AVAILABLE",
+					message: `Not enough stock for ${product.product.label}.`,
+				};
+			}
+		}
 		//Creating order in db
 		const newOrder = await prisma.order.create({
 			data: {
@@ -105,6 +120,23 @@ export const goToCheckout = async ({
 				},
 			},
 		});
+
+		for (const product of userWithCart.cart.products) {
+			await prisma.product.update({
+				where: {
+					id: product.product.id,
+				},
+				data: {
+					inStock: {
+						decrement: product.quantity,
+					},
+					sold: {
+						increment: product.quantity,
+					},
+				},
+			});
+			revalidatePath(`/product/${product.product.id}`, "page");
+		}
 
 		const stripeSession = await stripe.checkout.sessions.create({
 			success_url: `${process.env.BASE_URL}/account/my-orders`,

@@ -13,7 +13,8 @@ type Response =
 				| "SERVER_ERROR"
 				| "NOT_AUTHENTICATED"
 				| "INVALID_DATA"
-				| "NOT_IMPLEMENTED";
+				| "NOT_IMPLEMENTED"
+				| "NO_STOCK_AVAILABLE";
 			message: string;
 	  }
 	| {
@@ -62,6 +63,14 @@ export const addToCart = async (formData: FormData): Promise<Response> => {
 			success: false,
 			code: "INVALID_DATA",
 			message: "Invalid product id",
+		};
+	}
+
+	if (product.inStock === 0) {
+		return {
+			success: false,
+			code: "NO_STOCK_AVAILABLE",
+			message: "No stock available",
 		};
 	}
 
@@ -255,7 +264,11 @@ export const incrementQtyInCart = async (
 					userId: session.user.id,
 				},
 				include: {
-					products: true,
+					products: {
+						include: {
+							product: true,
+						},
+					},
 				},
 			});
 
@@ -267,6 +280,10 @@ export const incrementQtyInCart = async (
 
 			if (!product) {
 				throw new Error("Product not found in cart");
+			}
+
+			if (product.product.inStock === 0) {
+				throw new Error("No stock available");
 			}
 
 			if (product.quantity + 1 <= MAX_QUANTITY_PER_PRODUCTS) {

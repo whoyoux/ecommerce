@@ -128,6 +128,9 @@ model Product {
     updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
     productInCart ProductInCart[]
+
+    sold    Int @default(0)
+    inStock Int @map("in_stock")
 }
 
 model Cart {

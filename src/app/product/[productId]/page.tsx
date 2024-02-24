@@ -5,6 +5,9 @@ import { notFound } from "next/navigation";
 import AddToCartForm from "@/components/product-page/add-to-cart-form";
 import RecommendedProducts from "@/components/product-page/recommended-products";
 import getBase64 from "@/lib/get-local-base64";
+import { PrismaClientUnknownRequestError } from "@prisma/client/runtime/library";
+
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
 	const products = await prisma.product.findMany({});
@@ -15,16 +18,23 @@ export async function generateStaticParams() {
 }
 
 const ProductPage = async ({ params }: { params: { productId: string } }) => {
-	const product = await prisma.product.findFirst({
-		where: {
-			id: params.productId,
-		},
-		include: {
-			category: true,
-		},
-	});
+	let product = null;
+	try {
+		product = await prisma.product.findFirst({
+			where: {
+				id: params.productId,
+			},
+			include: {
+				category: true,
+			},
+		});
+	} catch (err) {
+		if (err instanceof PrismaClientUnknownRequestError) {
+			console.log(err);
+		}
+	}
 
-	if (!product) return notFound();
+	if (!product) return null;
 
 	const mainPhotoBase64 = await getBase64(product.images[0]);
 

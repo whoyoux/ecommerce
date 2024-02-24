@@ -8,75 +8,73 @@ import {
 	Users,
 } from "lucide-react";
 
-const getTotalSales = async (): Promise<number> => {
-	const totalOrdersCount = await prisma.order.count({
-		where: {
-			canceled: false,
-		},
-	});
-	return totalOrdersCount;
-};
+// const getTotalSales = async (): Promise<number> => {
+// 	const totalOrdersCount = await prisma.order.count({
+// 		where: {
+// 			canceled: false,
+// 		},
+// 	});
+// 	return totalOrdersCount;
+// };
 
-const getRevenue = async (): Promise<number> => {
-	const totalRevenue = await prisma.order.aggregate({
-		_sum: {
-			totalPrice: true,
-		},
-	});
-	return totalRevenue._sum.totalPrice ?? 0;
-};
+// const getRevenue = async (): Promise<number> => {
+// 	const totalRevenue = await prisma.order.aggregate({
+// 		_sum: {
+// 			totalPrice: true,
+// 		},
+// 	});
+// 	return totalRevenue._sum.totalPrice ?? 0;
+// };
 
-// Only get users registered by email and activated account or users registered by 3rd party providers
-const getTotalRegisteredUsers = async (): Promise<number> => {
-	const totalRegisteredUsers = await prisma.user.count({
-		where: {
-			OR: [
-				{
-					name: {
-						not: null,
-					},
-					active: false,
-				},
-				{
-					name: null,
-					active: true,
-				},
-			],
-		},
-	});
-	return totalRegisteredUsers;
-};
+// // Only get users registered by email and activated account or users registered by 3rd party providers
+// const getTotalRegisteredUsers = async (): Promise<number> => {
+// 	const totalRegisteredUsers = await prisma.user.count({
+// 		where: {
+// 			OR: [
+// 				{
+// 					name: {
+// 						not: null,
+// 					},
+// 					active: false,
+// 				},
+// 				{
+// 					name: null,
+// 					active: true,
+// 				},
+// 			],
+// 		},
+// 	});
+// 	return totalRegisteredUsers;
+// };
 
-const getTopSellingProducts = async () => {
-	const topSellingProducts = await prisma.product.groupBy({
-		by: ["id", "label"],
-		where: {
-			productInCart: {
-				every: {
-					order: {
-						canceled: false,
-					},
-				},
-			},
-		},
-	});
+// const getTopSellingProducts = async () => {
+// 	const topSellingProducts = await prisma.product.groupBy({
+// 		by: ["id", "label"],
+// 		where: {
+// 			productInCart: {
+// 				every: {
+// 					order: {
+// 						canceled: false,
+// 					},
+// 				},
+// 			},
+// 		},
+// 	});
 
-	console.log("top selling products: ", topSellingProducts);
-	return topSellingProducts;
-};
+// 	console.log("top selling products: ", topSellingProducts);
+// 	return topSellingProducts;
+// };
 
 const AdminPage = async () => {
-	const [totalSales, totalRevenue, totalUsers] = await Promise.all([
-		getTotalSales(),
-		getRevenue(),
-		getTotalRegisteredUsers(),
-	]);
-	console.log("total sales: ", totalSales);
-	console.log("total revenue: ", totalRevenue);
+	// const [totalSales, totalRevenue, totalUsers] = await Promise.all([
+	// 	getTotalSales(),
+	// 	getRevenue(),
+	// 	getTotalRegisteredUsers(),
+	// ]);
 	return (
 		<div className="w-full flex flex-col gap-4">
 			<div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-				<Card
+				{/* <Card
 					label="Total sales"
 					value={`${totalSales}`}
 					icon={<ShoppingBag size={28} />}
@@ -96,7 +94,7 @@ const AdminPage = async () => {
 					label="Registered users"
 					value={totalUsers.toString()}
 					icon={<Users size={28} />}
-				/>
+				/> */}
 			</div>
 			<div className="w-full grid grid-cols-2 gap-4">
 				<TopSellingProducts />

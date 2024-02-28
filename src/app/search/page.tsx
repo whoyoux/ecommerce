@@ -2,6 +2,7 @@ import FilterBy from "@/components/search-page/filter-by";
 import ProductsList from "@/components/search-page/products-list";
 import Ratings from "@/components/search-page/ratings";
 import SearchForm from "@/components/search-page/search-form";
+
 //AVAIALBLE QUERY STATES!
 // query -> string
 // category -> electronics | clothes | furniture | shoes | miscellaneous | sale
@@ -13,6 +14,8 @@ import SearchForm from "@/components/search-page/search-form";
 // Render on demand when user selects some filters options
 
 import { prisma } from "@/lib/prisma";
+
+export const revalidate = 3600; //Revalidate page every 1 hour
 
 export type SeachParams = {
 	query: string | string[] | undefined;

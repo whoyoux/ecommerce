@@ -12,9 +12,11 @@ export const dynamicParams = false;
 export async function generateStaticParams() {
 	const products = await prisma.product.findMany({});
 
-	return products.map((product) => ({
+	const paths = products.map((product) => ({
 		productId: product.id,
 	}));
+
+	return paths;
 }
 
 const ProductPage = async ({ params }: { params: { productId: string } }) => {

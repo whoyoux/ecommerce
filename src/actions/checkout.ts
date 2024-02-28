@@ -135,7 +135,7 @@ export const goToCheckout = async ({
 					},
 				},
 			});
-			revalidatePath(`/product/${product.product.id}`, "page");
+			// revalidatePath(`/product/${product.product.id}`, "page");
 		}
 
 		const stripeSession = await stripe.checkout.sessions.create({

@@ -46,7 +46,8 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
 				<section className="flex-1">
 					<ProductImages
 						images={product.images}
-						mainImageBase64={mainPhotoBase64 ?? ""}
+						mainImageBase64={mainPhotoBase64}
+						className="md:ml-0"
 					/>
 				</section>
 				<AddToCartForm product={product} />

@@ -40,7 +40,7 @@ const AddToCartForm = ({ product }: AddToCartFormProps) => {
 	};
 	return (
 		<form
-			className="flex-1 flex flex-col gap-4 max-w-md mx-auto"
+			className="flex-1 flex flex-col gap-4 mx-auto"
 			onSubmit={(e) => startTransition(() => addProductToCart(e))}
 		>
 			<input type="hidden" name="productId" value={product.id} />

@@ -1,16 +1,22 @@
 "use client";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState } from "react";
 
 type ProductImagesProps = {
 	images: string[];
-	mainImageBase64: string;
+	mainImageBase64?: string;
+	className?: string;
 };
 
-const ProductImages = ({ images, mainImageBase64 }: ProductImagesProps) => {
+const ProductImages = ({
+	images,
+	mainImageBase64,
+	className,
+}: ProductImagesProps) => {
 	const [selectedImage, setSelectedImage] = useState(0);
 	return (
-		<div className="flex flex-col max-w-md gap-4 mx-auto md:ml-0">
+		<div className={cn("flex flex-col gap-4 mx-auto", className)}>
 			<div className="w-full relative aspect-square">
 				<Image
 					src={images[selectedImage]}
@@ -18,11 +24,11 @@ const ProductImages = ({ images, mainImageBase64 }: ProductImagesProps) => {
 					fill
 					className="rounded-lg"
 					priority
-					placeholder="blur"
-					blurDataURL={mainImageBase64}
+					placeholder={mainImageBase64 ? "blur" : "empty"}
+					blurDataURL={mainImageBase64 ?? ""}
 				/>
 			</div>
-			<div className="flex items-center justify-between">
+			<div className="flex items-center justify-between gap-4">
 				{images.map((imageUrl, idx) => (
 					<div key={imageUrl} className="relative overflow-hidden rounded-lg">
 						<Image

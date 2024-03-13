@@ -44,6 +44,9 @@ const AdminProductsList = ({
 				/>
 			</div>
 			<div className="flex flex-col gap-4">
+				{products.length === 0 && (
+					<h4 className="text-lg font-medium">No products found</h4>
+				)}
 				{products.map((product) => (
 					<div key={product.id} className="flex gap-2">
 						<Image
